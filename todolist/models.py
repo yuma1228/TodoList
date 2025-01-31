@@ -10,4 +10,3 @@ class Todo(models.Model):
     is_done = models.BooleanField()
     def __str__(self):
         return self.assignments
-# Create your models here.
