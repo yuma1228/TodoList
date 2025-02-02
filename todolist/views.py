@@ -8,7 +8,9 @@ from django.core.paginator import Paginator
 
 def index(request):
     import requests
-    wheather_api_key='cb3586fe653c42e3bca84328250202'
+    import os
+    
+    wheather_api_key=os.environ.get('weather_api')
     lat_lon = "36.08250810111,140.11071321223"
     url = f"http://api.weatherapi.com/v1/current.json?key={wheather_api_key}&q={lat_lon}&lang=ja"
     response = requests.get(url)
