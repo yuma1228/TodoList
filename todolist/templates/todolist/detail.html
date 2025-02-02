@@ -24,6 +24,15 @@
             <button class="btn btn-outline-success mx-2" type="submit" >送信</button>
         </form>
     </nav>
+{% if form.errors %}
+<div class="alert alert-danger error-container">
+{% for key, errors in form.errors.items %}
+  {% for error in errors %}
+    {{ error }}
+  {% endfor %}
+{% endfor %}
+{% endif%}
+</div>
 <h1 class="ms-3">{{title}}</h1>
 <div>
 <ul class="list-group">

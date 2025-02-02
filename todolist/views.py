@@ -5,6 +5,7 @@ from .models import Todo,Day
 from django.shortcuts import get_object_or_404
 from datetime import datetime,timedelta
 from django.core.paginator import Paginator
+
 def index(request):
     import requests
     wheather_api_key='cb3586fe653c42e3bca84328250202'
@@ -45,17 +46,32 @@ def detail(request,date,num=1):
         'indexform':IndexForm(),
     } 
     return render(request,'todolist/detail.html',params)
-def create(request, date):
+def create(request, date,num=1):
     if request.method == "POST":
         obj = Day.objects.get(day=date)
-        task =request.POST['assignments']
-        if Todo.objects.filter(selected_day=obj,assignments=task).exists():
+        d = request.POST.copy()
+        d['is_done']=False
+        d['selected_day']=obj
+        form = TodoForm(d)
+        if form.is_valid():
+            task =request.POST['assignments']
+            Todo.objects.create(selected_day=obj,assignments=task,is_done=False)
             return redirect(reverse('todolist:detail', args=[str(date)]))
-        Todo.objects.create(selected_day=obj,assignments=task,is_done=False)
-    return redirect(reverse('todolist:detail', args=[str(date)]))
+    day_obj = get_object_or_404(Day,day=date)
+    data = Todo.objects.filter(selected_day=day_obj)
+    page = Paginator(data,8)
+    params = {
+        'title':date+'のTODO',
+        'day':date,
+        'preday':(datetime.strptime(date,"%Y-%m-%d")-timedelta(days=+1)).strftime("%Y-%m-%d"),
+        'nextday':(datetime.strptime(date,"%Y-%m-%d")+timedelta(days=+1)).strftime("%Y-%m-%d"),
+        'form':form,
+        'contents': page.get_page(num),
+        'indexform':IndexForm(),
+    } 
+    return render(request,'todolist/detail.html',params)  
 def delete(request,date):
     if request.method == "POST":
-        obj = Day.objects.get(day=date)
         task_id = request.POST.get('task_id')
         dele = Todo.objects.get(id=task_id)
         dele.delete()
