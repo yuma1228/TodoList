@@ -3,6 +3,7 @@ from . import views
 app_name = "todolist"
 urlpatterns = [
     path('',views.index,name='index'),
+    path('select_day',views.select_day,name='select_day'),
     path('detail/<str:date>',views.detail,name='detail'),
     path('detail/<str:date>/<int:num>',views.detail,name='detail'),
     path('create/<str:date>',views.create,name='create'),

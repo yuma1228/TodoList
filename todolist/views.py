@@ -6,14 +6,21 @@ from django.shortcuts import get_object_or_404
 from datetime import datetime,timedelta
 from django.core.paginator import Paginator
 def index(request):
-    if request.method == 'POST':
-        form = IndexForm(request.POST)
-        if form.is_valid():
-            selected_date = form.cleaned_data['day']
-            return redirect(reverse('todolist:detail',args=[str(selected_date)]))
+    import requests
+    wheather_api_key='cb3586fe653c42e3bca84328250202'
+    lat_lon = "36.08250810111,140.11071321223"
+    url = f"http://api.weatherapi.com/v1/current.json?key={wheather_api_key}&q={lat_lon}&lang=ja"
+    response = requests.get(url)
+    data = response.json()
+    location = data["location"]["name"]
+    condition = data["current"]["condition"]["text"]
+    icon = data["current"]["condition"]["icon"]
     params = {
         'title':'Todolist',
-        'form':IndexForm()
+        'form':IndexForm(),
+        'condition':condition,
+        'icon':icon,
+        'location':location
     }
     return render(request,'todolist/index.html',params)
 def detail(request,date,num=1):
@@ -53,5 +60,10 @@ def delete(request,date):
         dele = Todo.objects.get(id=task_id)
         dele.delete()
     return redirect(reverse('todolist:detail', args=[str(date)]))
-
+def select_day(request):
+    if request.method == 'POST':
+        form = IndexForm(request.POST)
+        if form.is_valid():
+            selected_date = form.cleaned_data['day']
+            return redirect(reverse('todolist:detail',args=[str(selected_date)]))
 # Create your views here.
