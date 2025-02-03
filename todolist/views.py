@@ -10,7 +10,7 @@ def index(request):
     import requests
     import os
     
-    wheather_api_key=os.environ.get('weather_api')
+    wheather_api_key=f'{os.environ.get('weather_api')}'
     lat_lon = "36.08250810111,140.11071321223"
     url = f"http://api.weatherapi.com/v1/current.json?key={wheather_api_key}&q={lat_lon}&lang=ja"
     response = requests.get(url)
