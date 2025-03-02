@@ -182,15 +182,11 @@
       document.addEventListener("DOMContentLoaded", function () {
         var deleteModal = document.getElementById("DeleteModal");
         deleteModal.addEventListener("show.bs.modal", function (event) {
-          var button = event.relatedTarget; // モーダルを開いたボタン
+          var button = event.relatedTarget;
           var taskId = button.getAttribute("data-task-id");
           var taskName = button.getAttribute("data-task-name");
-
-          // モーダルのメッセージを変更
           var modalBody = deleteModal.querySelector("#deleteTaskMessage");
           modalBody.textContent = "タスク「" + taskName + "」を削除しますか？";
-
-          // フォームの hidden input に task_id をセット
           var taskIdInput = deleteModal.querySelector("#deleteTaskId");
           taskIdInput.value = taskId;
         });

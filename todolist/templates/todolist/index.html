@@ -17,22 +17,32 @@
   </head>
   <body>
     <nav
+
       class="navbar"
       style="
         background-color: #e3f2fd;
         display: flex;
-        justify-content: flex-end;
         align-items: center;
         padding: 0 20px;
       "
     >
+    <span><strong>{{ day }}</strong></span>
+    <span style ="margin-left:auto">Weather in Tukuba
       <img src="{{icon}}" alt="icon" />
-      <span>{{condition}}</span>
     </nav>
+    <div  style="margin-left: 20px">
     <h1>{{ title }}</h1>
-    <form method="post" action="{% url 'todolist:select_day'%}">
+    <!--<form method="post" action="{% url 'todolist:select_day'%}">
       {% csrf_token %} {{ form.as_p }}
       <button type="submit">検索</button>
+    </form>-->
+    <form method="post" action="">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <a href="{% url 'todolist:signup' %}"  style = "margin-left:100px"class="btn btn-outline-dark">新規登録</a>
+        <button type="submit" class="btn btn-outline-dark">ログイン</button>
     </form>
+    
+  </div>
   </body>
 </html>
