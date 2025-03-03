@@ -9,11 +9,12 @@ from django.contrib.auth import authenticate, login
 from django.contrib import messages
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.forms import UserCreationForm
+from django.conf import settings
 
 def index(request):
     import requests
     import os
-    wheather_api_key=f'{os.environ.get('weather_api')}'
+    wheather_api_key=settings.WEATHER_API
     lat_lon = "36.08250810111,140.11071321223"
     url = f"http://api.weatherapi.com/v1/current.json?key={wheather_api_key}&q={lat_lon}&lang=ja"
     response = requests.get(url)
